@@ -1,27 +1,22 @@
-const solveTheMaze = function(maze, row, column) {
-    //Base case
-    if (maze[row][column] === "e") {
+const solveTheMaze = function(maze, row, column, step) {
+    let currentMaze = maze
+    // //Base case
+    if (currentMaze[row][column] === "e") {
         return "You win!"
     }
+    currentMaze[row][column] = "*"
     //General case
-    if (maze[row][column + 1] === (" " || "e")) {
-        //moving to the right
-        return "R" + solveTheMaze(maze, row, column + 1)
-    } else if (maze[row + 1][column] === (" " || "e")) {
+    if ((currentMaze[row + 1]?.[column] !== "*") && (currentMaze[row + 1]?.[column] !== undefined)) {
         //moving down
-        return "D" + solveTheMaze(maze, row + 1, column)
-    } else if (maze[row][column - 1] === (" " || "e")) {
+        return "D" + " " + solveTheMaze(maze, row + 1, column, step + 1)
+    }
+    if ((currentMaze[row]?.[column + 1] !== "*") && (currentMaze[row]?.[column + 1] !== undefined)) {
+        //moving right
+        return "R" + " " + solveTheMaze(maze, row, column + 1, step + 1)
+    }
+    if ((currentMaze[row]?.[column - 1] !== "*") && (currentMaze[row]?.[column - 1] !== undefined)) {
         //moving left
-        return "L" + solveTheMaze(maze, row, column - 1)
-    } else if (maze[row][column + 1] === "*") {
-        //moving to the right, finding a wall, and moving down
-        return "D" + solveTheMaze(maze, row + 1, column)
-    } else if (maze[row + 1][column] !== undefined) {
-        //moving down and having the exit be next
-        return "D" + solveTheMaze(maze, row + 1, column)
-    } else if (maze[row][column + 1] !== undefined) {
-        //moving to the right and having the exit be next
-        return "R" + solveTheMaze(maze, row, column + 1)
+        return "L" + " " + solveTheMaze(maze, row, column - 1, step + 1)
     }
 }
 
@@ -38,9 +33,9 @@ let mySmallMaze = [
 let maze = [
     [' ', ' ', ' ', '*', ' ', ' ', ' '],
     ['*', '*', ' ', '*', ' ', '*', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', '*', ' ', ' ', ' '],
     [' ', '*', '*', '*', '*', '*', ' '],
     [' ', ' ', ' ', ' ', ' ', ' ', 'e']
 ];
 
-console.log(solveTheMaze(mySmallMaze, 0, 0))
+console.log(solveTheMaze(maze, 0, 0, 0))
